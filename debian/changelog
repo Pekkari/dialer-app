@@ -1,3 +1,9 @@
+dialer-app (0.2+ubports2) xenial; urgency=medium
+
+  * Fix swap calls, and swap call on hangup if call is held
+
+ -- José Pekkarinen <jose.pekkarinen@foxhound.fi>  Tue, 20 Jul 2021 16:33:56 +0200
+
 dialer-app (0.2+ubports1) xenial; urgency=medium
 
   * Import to UBports

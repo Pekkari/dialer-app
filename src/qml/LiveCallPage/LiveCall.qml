@@ -118,6 +118,8 @@ Page {
     }
 
     function changeCallHoldingStatus(call, held) {
+        if (callHoldingConnection.target)
+            callHoldingConnection.target.held = true;
         callHoldingConnection.target = call;
         call.held = held;
     }
@@ -378,10 +380,24 @@ Page {
         }
     }
 
+    function swapCalls() {
+        if (call && callManager.backgroundCall) {
+            if (call.held)
+                changeCallHoldingStatus(call, false);
+            else
+                changeCallHoldingStatus(callManager.backgroundCall, false);
+        } else {
+            mainView.showNotification(i18n.tr("Failed to swap calls"),
+                                      i18n.tr("It is required at least 2 calls to swap."));
+        }
+    }
+
     function endCall() {
         if (call) {
             call.endCall();
         }
+        if (callManager.backgroundCall && callManager.backgroundCall.held)
+            changeCallHoldingStatus(callManager.backgroundCall, false);
     }
 
     function nameForAudioId(id) {
@@ -593,7 +609,7 @@ Page {
             color: mainView.backgroundColor
             strokeColor: theme.palette.normal.positive
             onClicked: {
-                changeCallHoldingStatus(callManager.foregroundCall, true)
+                swapCalls()
             }
         }
 
@@ -706,9 +722,10 @@ Page {
             iconWidth: units.gu(3)
             iconHeight: units.gu(3)
             onClicked: {
-                if (call) {
-                    changeCallHoldingStatus(call, !call.held)
-                }
+                if (callManager.backgroundCall)
+                    swapCalls();
+                else if (call)
+                    changeCallHoldingStatus(call, !call.held);
             }
         }
 

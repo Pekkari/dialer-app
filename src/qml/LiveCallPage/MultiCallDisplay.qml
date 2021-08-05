@@ -146,7 +146,7 @@ Column {
 
             MouseArea {
                 anchors.fill: parent
-                onClicked: liveCall.changeCallHoldingStatus(callEntry, false);
+                onClicked: liveCall.swapCalls();
                 enabled: callEntry.held
             }
 
